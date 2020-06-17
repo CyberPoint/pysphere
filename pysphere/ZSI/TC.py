@@ -158,7 +158,7 @@ class TypeCode(object, metaclass=MetaTypeCode):
         if len(_children(elt)): return elt
         href = _find_href(elt)
         if not href:
-            if self.minOccurs is 0: return None
+            if self.minOccurs == 0: return None
             raise EvaluateException('Required' + tag + ' missing',
                     ps.Backtrace(elt))
         return ps.FindLocalHREF(href, elt, 0)
