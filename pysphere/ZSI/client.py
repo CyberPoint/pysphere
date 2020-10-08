@@ -15,7 +15,7 @@ import base64, http.client, http.cookies, types, time, urllib.parse
 from pysphere.ZSI.address import Address
 from pysphere.ZSI.wstools.logging import getLogger as _GetLogger
 import collections
-_b64_encode = base64.encodestring
+_b64_encode = base64.encodebytes
 
 class _AuthHeader:
     """<BasicAuth xmlns="ZSI_SCHEMA_URI">

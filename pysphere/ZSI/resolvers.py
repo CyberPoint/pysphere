@@ -5,7 +5,7 @@
 
 from pysphere.ZSI import _copyright, _child_elements, EvaluateException, TC, UNICODE_ENCODING
 import urllib.request, urllib.parse, urllib.error
-from base64 import decodestring as b64decode
+from base64 import decodebytes as b64decode
 import email
 import io
 
