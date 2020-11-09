@@ -191,7 +191,7 @@ class WSSecurityHandler:
                     if i is None: continue
                     digest.update(i)
 
-                if password == base64.encodestring(digest.digest()).strip():
+                if password == base64.encodebytes(digest.digest()).strip():
                     return ps
                 
                 raise RuntimeError('Unauthorized, digest failed')
@@ -256,7 +256,7 @@ class WSSecurityHandler:
             except IndexError:
                 raise RuntimeError('unknown digestMethods Algorithm')
             
-            digestValue = base64.encodestring(digest(xml).digest()).strip()
+            digestValue = base64.encodebytes(digest(xml).digest()).strip()
             if si.Reference.DigestValue != digestValue:
                 raise RuntimeError('digest does not match')
             
