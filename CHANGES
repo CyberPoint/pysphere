@@ -1,8 +1,12 @@
-Roadmap for 0.1.9
-- Add vms_from_folder method in VIServer
-- Added VIEventHistoryCollector class to retrieve vCenter events
+New in 0.1.10
 
-New in for 0.1.8
+- Import Callable from collections.abc for compatibility with python 3.10
+
+New in 0.1.9
+
+- Replace use of deprecated base64.(en|de)codestring for compatibility with python 3.8
+
+New in 0.1.8
 - Added VIManagedEntity class extended by VIVirtualMachine
 - Added Rename, Reload, and Destroy methods to VIManagedEntity
 - Fix #26: VIVirtualMachine.send_file() gratuitiosly overwrites urllib2's installed default opener
@@ -36,7 +40,7 @@ New in 0.1.6
 - Added VIMor class
 - Multithread support
 
-New in 0.1.5:
+New in 0.1.5
 
 - suppor vSphere 5.0
 - added suspend method to VM
