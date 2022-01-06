@@ -14,7 +14,10 @@ from pysphere.ZSI.TCcompound import Struct
 import base64, http.client, http.cookies, types, time, urllib.parse
 from pysphere.ZSI.address import Address
 from pysphere.ZSI.wstools.logging import getLogger as _GetLogger
-import collections
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections import Callable
 _b64_encode = base64.encodebytes
 
 class _AuthHeader:
@@ -390,7 +393,7 @@ class _Binding:
                     saved = d.strip()
             if saved: self.cookies.load(saved)
             if response.status == 401:
-                if not isinstance(self.http_callbacks.get(response.status,None), collections.Callable):
+                if not isinstance(self.http_callbacks.get(response.status,None), Callable):
                     raise RuntimeError('HTTP Digest Authorization Failed')
                 self.http_callbacks[response.status](response)
                 continue

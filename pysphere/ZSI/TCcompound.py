@@ -18,7 +18,10 @@ from pysphere.ZSI.wstools.Namespaces import SOAP
 from pysphere.ZSI.wstools.logging import getLogger as _GetLogger
 import re
 from copy import copy as _copy
-import collections
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections import Callable
 
 _find_arrayoffset = lambda E: E.getAttributeNS(SOAP.ENC, "offset")
 _find_arrayposition = lambda E: E.getAttributeNS(SOAP.ENC, "position")
@@ -30,7 +33,7 @@ def _check_typecode_list(ofwhat, tcname):
     '''Check a list of typecodes for compliance with Struct
     requirements.'''
     for o in ofwhat:
-        if isinstance(o, collections.Callable): #skip if _Mirage
+        if isinstance(o, Callable): #skip if _Mirage
             continue
         if not isinstance(o, TypeCode):
             raise TypeError(
@@ -178,7 +181,7 @@ class ComplexType(TypeCode):
         for i,what in [ (i, self.ofwhat[i]) for i in range(len(self.ofwhat)) ]:
             
             # retrieve typecode if it is hidden
-            if isinstance(what, collections.Callable): what = what()
+            if isinstance(what, Callable): what = what()
             
             # Loop over all available kids
             if debug: 
@@ -363,7 +366,7 @@ class ComplexType(TypeCode):
             what = self.ofwhat[indx]
             
             # retrieve typecode if hidden
-            if isinstance(what, collections.Callable): what = what()
+            if isinstance(what, Callable): what = what()
             
             if debug:
                 self.logger.debug('serialize what -- %s', 

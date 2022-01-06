@@ -8,7 +8,10 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pysphere.ZSI import *
 from pysphere.ZSI import _child_elements, _copyright, _seqtypes, _find_arraytype, _find_type, resolvers 
 from pysphere.ZSI.auth import _auth_tc, AUTH, ClientBinding
-import collections
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections import Callable
 
 
 # Client binding information is stored in a global. We provide an accessor
@@ -54,7 +57,7 @@ def _Dispatch(ps, modules, SendResponse, SendFault, nsdict={}, typesmodule=None,
             raise TypeError("Unknown method " + what)
 
         # Of those modules, see who's callable.
-        handlers = [ h for h in handlers if isinstance(h, collections.Callable) ]
+        handlers = [ h for h in handlers if isinstance(h, Callable) ]
         if len(handlers) == 0:
             raise TypeError("Unimplemented method " + what)
         if len(handlers) > 1:
