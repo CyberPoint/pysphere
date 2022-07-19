@@ -51,7 +51,7 @@ class VIServer:
         #By default impersonate the VI Client to be accepted by Virtual Server
         self.__initial_headers = {"User-Agent":"VMware VI Client/5.0.0"}
 
-    def connect(self, host, user, password, trace_file=None, sock_timeout=None):
+    def connect(self, host, user, password, trace_file=None, sock_timeout=None, verify=True):
         """Opens a session to a VC/ESX server with the given credentials:
         @host: is the server's hostname or address. If the web service uses
         another protocol or port than the default, you must use the full
@@ -60,8 +60,7 @@ class VIServer:
         @password: password to authenticate the session
         @trace_file: (optional) a file path to log SOAP requests and responses
         @sock_timeout: (optional) only for python >= 2.6, sets the connection
-        timeout for sockets, in python 2.5 you'll  have to use
-        socket.setdefaulttimeout(secs) to change the global setting.
+        @verify: (optional) only for python >= 3.4.3, False value disables SSL verification
         """
 
         self.__user = user
@@ -81,12 +80,15 @@ class VIServer:
         try:
             #get the server's proxy
             locator = VI.VimServiceLocator()
-            args = {'url':server_url}
+            args = {'url': server_url, 'transdict': {}}
             if trace_file:
                 trace=open(trace_file, 'w')
                 args['tracefile'] = trace
             if sock_timeout and sys.version_info >= (2, 6):
-                args['transdict'] = {'timeout':sock_timeout}
+                args['transdict']['timeout'] = sock_timeout
+            if not verify and sys.version_info >= (3, 4, 3):
+                import ssl
+                args['transdict']['context'] = ssl._create_unverified_context()
 
             self._proxy = locator.getVimPort(**args)
 
