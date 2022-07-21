@@ -1,2 +1,2 @@
 # Do not edit. Auto generated
-version = (0, 1, 11)
+version = (0, 1, 12)
