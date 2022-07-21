@@ -16,7 +16,7 @@ from pysphere.ZSI.wstools.Utility import SplitQName
 from pysphere.ZSI.wstools.c14n import Canonicalize
 from pysphere.ZSI.wstools.logging import getLogger as _GetLogger
 
-import re, types, time, copy
+import re, time, copy
 
 from base64 import decodebytes as b64decode, encodebytes as b64encode
 from urllib.parse import unquote as urldecode, quote as urlencode
@@ -593,7 +593,7 @@ class Any(TypeCode):
 
     def get_formatted_content(self, pyobj):
         tc = type(pyobj)
-        if tc == types.InstanceType:
+        if tc == object:
             tc = pyobj.__class__
             if hasattr(pyobj, 'typecode'):
                 #serializer = pyobj.typecode.serialmap.get(tc)
@@ -655,7 +655,7 @@ class Any(TypeCode):
             self.nspname = parentNspname
             return
                 
-        if tc == types.InstanceType:
+        if tc == object:
             tc = pyobj.__class__
             if hasattr(pyobj, 'typecode'):
                 #serializer = pyobj.typecode.serialmap.get(tc)
@@ -675,7 +675,7 @@ class Any(TypeCode):
             # Last-chance; serialize instances as dictionary
             if pyobj is None:
                 self.serialize_as_nil(elt.createAppendElement(ns, n))
-            elif type(pyobj) != types.InstanceType:
+            elif type(pyobj) != object:
                 raise EvaluateException('''Any can't serialize ''' + \
                         repr(pyobj))
             else:
@@ -1421,7 +1421,7 @@ class AnyElement(AnyType):
             raise TypeError('pyobj is a typecode instance.')
         
         what = getattr(pyobj, 'typecode', None)
-        if what is not None and type(pyobj) is types.InstanceType:
+        if what is not None and type(pyobj) is object:
             tc = pyobj.__class__
             what = Any.serialmap.get(tc)
             if not what:
