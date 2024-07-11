@@ -88,7 +88,12 @@ class VIServer:
                 args['transdict']['timeout'] = sock_timeout
             if not verify and sys.version_info >= (3, 4, 3):
                 import ssl
-                args['transdict']['context'] = ssl._create_unverified_context()
+                context = ssl.create_default_context()
+                context.check_hostname = False
+                context.verify_mode = ssl.CERT_NONE
+                context.set_ciphers('AES256-GCM-SHA384')
+                args['transdict']['context'] = context
+                #args['transdict']['context'] = ssl._create_unverified_context()
 
             self._proxy = locator.getVimPort(**args)
 
