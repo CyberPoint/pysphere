@@ -51,7 +51,8 @@ class VIServer:
         #By default impersonate the VI Client to be accepted by Virtual Server
         self.__initial_headers = {"User-Agent":"VMware VI Client/5.0.0"}
 
-    def connect(self, host, user, password, trace_file=None, sock_timeout=None, verify=True):
+    def connect(self, host, user, password, trace_file=None, sock_timeout=None,
+                verify=True, ciphers=None):
         """Opens a session to a VC/ESX server with the given credentials:
         @host: is the server's hostname or address. If the web service uses
         another protocol or port than the default, you must use the full
@@ -61,6 +62,8 @@ class VIServer:
         @trace_file: (optional) a file path to log SOAP requests and responses
         @sock_timeout: (optional) only for python >= 2.6, sets the connection
         @verify: (optional) only for python >= 3.4.3, False value disables SSL verification
+        @ciphers: (optional) comma-separated list of ciphers to set when creating SSL context;
+        only evaluated if verify=False
         """
 
         self.__user = user
@@ -91,7 +94,8 @@ class VIServer:
                 context = ssl.create_default_context()
                 context.check_hostname = False
                 context.verify_mode = ssl.CERT_NONE
-                context.set_ciphers('AES256-GCM-SHA384')
+                if ciphers:
+                    context.set_ciphers(ciphers)
                 args['transdict']['context'] = context
                 #args['transdict']['context'] = ssl._create_unverified_context()
 
